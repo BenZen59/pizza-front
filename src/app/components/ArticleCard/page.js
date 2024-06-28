@@ -9,7 +9,7 @@ export default function ArticleCard({ idArticle, taille }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await pizzaApi.getArticleWithTaille(idArticle, taille);
+        const response = await pizzaApi.getArticleWithTypeProduit("Pizza");
         console.log(response.data);
         setArticle(response.data);
       } catch (error) {
@@ -29,11 +29,18 @@ export default function ArticleCard({ idArticle, taille }) {
   //taille
   //typeProduitName
   return (
-    <div className="article-card">
-      <p>{article.articleName}</p>
-      <p>{article.typeProduitName}</p>
-      <p>Taille : {article.taille}</p>
-      <p>Prix : {article.prixTtc} €</p>
+    <div className="flex flex-wrap gap-10">
+      {article.map((item, index) => (
+        <div
+          key={index}
+          className="bg-white text-black p-4 w-[300px] h-[300px] border border-black rounded-md"
+        >
+          <p className="text-lg font-semibold">{item.articleName}</p>
+          <p className="text-sm">{item.typeProduitName}</p>
+          <p className="text-sm">Taille : {item.taille}</p>
+          <p className="text-sm">Prix : {item.prixTtc} €</p>
+        </div>
+      ))}
     </div>
   );
 }
