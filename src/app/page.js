@@ -1,7 +1,9 @@
-import Image from "next/image";
+import ArticleCard from "./components/ArticleCard/page";
 
 export default function Home() {
   return (
-   <main>test</main>
+    <main>
+      <ArticleCard idArticle={1} taille={26} />
+    </main>
   );
 }
