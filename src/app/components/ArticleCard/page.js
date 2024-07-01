@@ -27,7 +27,7 @@ export default function ArticleCard({ idArticle, taille }) {
   }, [idArticle, taille]);
 
   return (
-    <div className="flex flex-wrap gap-10 p-12">
+    <div className="flex flex-wrap gap-10 pl-12 pt-8">
       {article.map((item, index) => (
         <div
           key={index}
@@ -36,7 +36,7 @@ export default function ArticleCard({ idArticle, taille }) {
           <div className="flex justify-center items-center h-[150px]">
             <Image
               src={`/images/${item.image}`}
-              alt="Picture of the pizza"
+              alt="Picture of the article"
               width={180}
               height={180}
               className="object-cover mt-6"
@@ -46,7 +46,7 @@ export default function ArticleCard({ idArticle, taille }) {
           <p className="text-sm mt-3 text-gray-500 italic h-[60px]">
             {item.description}
           </p>
-          <p className="text-sm mt-3">Taille de pizza : {item.taille} cm</p>
+          <p className="text-sm mt-3">Taille de l'article : {item.taille} cm</p>
           <p className="text-2xl text-red-500 mt-3">{item.prixTtc} €</p>
           <button className="bg-blue-600 text-white py-2 px-4 mt-3 rounded-full hover:bg-blue-700 w-[200px] flex items-center justify-center space-x-2 mx-auto">
             <CiPizza />
