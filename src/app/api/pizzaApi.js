@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const pizzaApi = {
+  getAllArticle: () => {
+    return axios.get(`/api/articles/`);
+  },
   getArticleWithTaille: (idArticle, taille) => {
     return axios.get(`/api/articles/${idArticle}/${taille}`);
   },
