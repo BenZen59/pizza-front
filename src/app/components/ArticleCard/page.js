@@ -5,30 +5,39 @@ import { CiPizza } from "react-icons/ci";
 import { BsCart4 } from "react-icons/bs";
 import Image from "next/image";
 
-export default function ArticleCard({ idArticle, taille }) {
-  console.log(idArticle, taille);
-  const [article, setArticle] = useState([]);
+export default function ArticleCard({ selectedCategorie }) {
+  const [articles, setArticles] = useState([]);
+  const [taille, setTaille] = useState(26); // Taille par défaut, peut être modifiée si nécessaire
+  console.log(selectedCategorie);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await pizzaApi.getArticleWithTypeProduit("Pizza");
-        const filteredArticles = response.data.filter(
-          (article) => article.taille === 26
+        const response = await pizzaApi.getArticleWithTypeProduit(
+          selectedCategorie
         );
-        setArticle(filteredArticles);
+
+        // Vérifier si le type de produit est 'pizza'
+        if (selectedCategorie === 1) {
+          // Si c'est une pizza, filtrer par taille
+          const filteredArticles = response.data.filter(
+            (article) => article.taille === 26
+          );
+          setArticles(filteredArticles);
+        } else {
+          setArticles(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-    console.log(article);
-    return () => {};
-  }, [idArticle, taille]);
+  }, [selectedCategorie, taille]); // Mettre à jour le tableau de dépendances pour inclure selectedCategorie et taille
 
   return (
-    <div className="flex flex-wrap gap-10 pl-12 pt-8">
-      {article.map((item, index) => (
+    <div className="flex flex-wrap gap-10 pl-12 pt-8 pb-8">
+      {articles.map((item, index) => (
         <div
           key={index}
           className="bg-white text-black p-4 w-[300px] h-[515px] border border-black rounded-md text-center"
@@ -36,13 +45,13 @@ export default function ArticleCard({ idArticle, taille }) {
           <div className="flex justify-center items-center h-[150px]">
             <Image
               src={`/images/${item.image}`}
-              alt="Picture of the article"
+              alt="Image de l'article"
               width={180}
               height={180}
               className="object-cover mt-6"
             />
           </div>
-          <p className="text-2xl font-semibold mt-10">{item.articleName}</p>
+          <p className="text-2xl font-semibold mt-10">{item.libelle}</p>
           <p className="text-sm mt-3 text-gray-500 italic h-[60px]">
             {item.description}
           </p>
