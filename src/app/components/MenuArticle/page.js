@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { Button } from "@nextui-org/button";
 import pizzaApi from "../../api/pizzaApi";
 import ArticleCard from "../ArticleCard/page";
 
@@ -29,8 +30,9 @@ export default function MenuArticle() {
       <div className="flex flex-wrap gap-10 p-12 justify-center">
         {categorie.map((item, index) => (
           <div key={index} className="text-gray-500 text-xl">
-            <button
-              className={`w-40 h-16 flex items-center justify-center rounded-full border-4 px-4 py-2 ${
+            <Button
+              radius="full"
+              className={`w-40 h-16 flex items-center justify-center border-4 px-4 py-2 text-xl ${
                 selectedCategorie === item.idTypeProduit
                   ? "bg-red-500 text-white"
                   : "border-gray-500"
@@ -38,7 +40,7 @@ export default function MenuArticle() {
               onClick={() => handleCategoryClick(item.idTypeProduit)}
             >
               {item.libelle}
-            </button>
+            </Button>
           </div>
         ))}
       </div>

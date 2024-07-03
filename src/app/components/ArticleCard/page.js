@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import pizzaApi from "../../api/pizzaApi";
 import { CiPizza } from "react-icons/ci";
 import { BsCart4 } from "react-icons/bs";
+import { Button } from "@nextui-org/button";
+import pizzaApi from "../../api/pizzaApi";
 import Image from "next/image";
 
 export default function ArticleCard({ selectedCategorie }) {
@@ -40,7 +41,7 @@ export default function ArticleCard({ selectedCategorie }) {
       {articles.map((item, index) => (
         <div
           key={index}
-          className="bg-white text-black p-4 w-[300px] h-[515px] border border-black rounded-md text-center"
+          className="bg-white text-black p-4 w-[300px] h-[515px] shadow-lg border-opacity-20 border-black border rounded-md text-center"
         >
           <div className="flex justify-center items-center h-[150px]">
             <Image
@@ -57,14 +58,20 @@ export default function ArticleCard({ selectedCategorie }) {
           </p>
           <p className="text-sm mt-3">Taille de l'article : {item.taille} cm</p>
           <p className="text-2xl text-red-500 mt-3">{item.prixTtc} €</p>
-          <button className="bg-blue-600 text-white py-2 px-4 mt-3 rounded-full hover:bg-blue-700 w-[200px] flex items-center justify-center space-x-2 mx-auto">
+          <Button
+            radius="full"
+            className="bg-blue-600 text-white mt-3 hover:bg-blue-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+          >
             <CiPizza />
             <span>Personnaliser</span>
-          </button>
-          <button className="bg-green-600 text-white py-2 px-4 mt-3 rounded-full hover:bg-green-700 w-[200px] flex items-center justify-center space-x-2 mx-auto">
+          </Button>
+          <Button
+            radius="full"
+            className="bg-green-600 text-white mt-3 hover:bg-green-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+          >
             <BsCart4 />
             <span>Ajouter au panier</span>
-          </button>
+          </Button>
         </div>
       ))}
     </div>
