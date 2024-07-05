@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
+import { CardProvider, useCart } from "react-use-cart";
 import pizzaApi from "../../api/pizzaApi";
 import Image from "next/image";
 
@@ -17,6 +18,7 @@ export default function ArticleCard({ selectedCategorie }) {
   const [articles, setArticles] = useState([]);
   const [taille, setTaille] = useState(26); // Taille par défaut, peut être modifiée si nécessaire
   const [allArticles, setAllArticles] = useState([]); // Tous les articles non filtrés
+  const { addItem } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
