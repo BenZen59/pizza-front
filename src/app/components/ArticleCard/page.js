@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { CiPizza } from "react-icons/ci";
 import { BsCart4 } from "react-icons/bs";
@@ -10,7 +9,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { CardProvider, useCart } from "react-use-cart";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/app/redux/slices/cartSlice";
 import pizzaApi from "../../api/pizzaApi";
 import Image from "next/image";
 
@@ -18,7 +18,7 @@ export default function ArticleCard({ selectedCategorie }) {
   const [articles, setArticles] = useState([]);
   const [taille, setTaille] = useState(26); // Taille par défaut, peut être modifiée si nécessaire
   const [allArticles, setAllArticles] = useState([]); // Tous les articles non filtrés
-  const { addItem } = useCart();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,10 +52,14 @@ export default function ArticleCard({ selectedCategorie }) {
     }
   }, [taille, selectedCategorie, allArticles]);
 
+  const addToCartHandler = (item) => {
+    dispatch(addToCart({ ...item, qty: 1 }));
+  };
+
   return (
     <>
       {selectedCategorie === 1 && (
-        <div className="pl-12">
+        <div className="pl-40">
           <Dropdown>
             <DropdownTrigger>
               <Button
@@ -88,11 +92,14 @@ export default function ArticleCard({ selectedCategorie }) {
           </Dropdown>
         </div>
       )}
-      <div className="flex flex-wrap gap-10 pl-12 pt-8 pb-8">
+
+      <div className="flex flex-wrap gap-10 pl-40 pr-12 pt-8 pb-8 w-[95%]">
+        {" "}
+        {/* Ajouter du padding à droite ici */}
         {articles.map((item, index) => (
           <div
             key={index}
-            className="bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center"
+            className="bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4" // Ajouter une marge inférieure
           >
             <div className="flex justify-center items-center h-[150px]">
               <Image
@@ -121,6 +128,7 @@ export default function ArticleCard({ selectedCategorie }) {
             <Button
               radius="full"
               className="bg-green-600 text-white mt-3 hover:bg-green-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+              onClick={() => addToCartHandler(item)}
             >
               <BsCart4 />
               <span>Ajouter au panier</span>

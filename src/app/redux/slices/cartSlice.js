@@ -4,10 +4,10 @@ import Cookies from "js-cookie";
 const initialState = {
   loading: true,
   cartItems: [],
-};
-
-const addDecimals = (num) => {
-  return (Math.round(num * 100) / 100).toFixed(2);
+  itemsPrice: 0,
+  shippingPrice: 0,
+  taxPrice: 0,
+  totalPrice: 0,
 };
 
 const cartSlice = createSlice({
@@ -15,42 +15,31 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const item = action.payload;
-      const existItem = state.cartItems.find((x) => x.id === item.id);
-      if (existItem) {
-        state.cartItems = state.cartItems.map((x) =>
-          x.id === existItem.id ? item : x
-        );
+      const { id, qty, prixTtc, image, articleName } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+
+      if (existingItem) {
+        existingItem.qty += qty;
       } else {
-        state.cartItems = [...state.cartItems, item];
+        state.cartItems.push({ id, qty, prixTtc, image, articleName });
       }
-      state.itemsPrice = addDecimals(
-        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-      );
-      state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 100);
-      state.taxPrice = addDecimals(
-        Number((0.15 * state.itemsPrice).toFixed(2))
-      );
-      state.totalPrice =
-        Number(state.itemsPrice) +
-        Number(state.shippingPrice) +
-        Number(state.taxPrice);
-      Cookies.set("cart", JSON.stringify(state));
+
+      state.totalPrice += prixTtc * qty; // Mise à jour du prix total
+      Cookies.set("cart", JSON.stringify({ ...state })); // Utilisation de l'opérateur spread pour créer une copie de l'état
     },
     removeFromCart: (state, action) => {
-      state.cartItems = state.cartItems.filter((x) => x.id !== action.payload);
-      state.itemsPrice = addDecimals(
-        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+      const idToRemove = action.payload;
+      const itemToRemove = state.cartItems.find(
+        (item) => item.id === idToRemove
       );
-      state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 100);
-      state.taxPrice = addDecimals(
-        Number((0.15 * state.itemsPrice).toFixed(2))
-      );
-      state.totalPrice =
-        Number(state.itemsPrice) +
-        Number(state.shippingPrice) +
-        Number(state.taxPrice);
-      Cookies.set("cart", JSON.stringify(state));
+
+      if (itemToRemove) {
+        state.totalPrice -= itemToRemove.prixTtc * itemToRemove.qty; // Déduction du prix total
+        state.cartItems = state.cartItems.filter(
+          (item) => item.id !== idToRemove
+        );
+      }
+      Cookies.set("cart", JSON.stringify({ ...state })); // Utilisation de l'opérateur spread pour créer une copie de l'état
     },
     hideLoading: (state) => {
       state.loading = false;
