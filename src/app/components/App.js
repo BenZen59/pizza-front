@@ -14,9 +14,9 @@ export default function App({ children }) {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="bg-white">
       <Header />
-      <main className="bg-gray-100">
+      <main>
         <CartSidebar />
         <MenuArticle />
       </main>

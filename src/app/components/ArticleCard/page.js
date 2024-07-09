@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { CiPizza } from "react-icons/ci";
 import { BsCart4 } from "react-icons/bs";
@@ -120,7 +121,7 @@ export default function ArticleCard({ selectedCategorie }) {
             <p className="text-2xl text-red-500 mt-3">{item.prixTtc} €</p>
             <Button
               radius="full"
-              className="bg-blue-600 text-white mt-3 hover:bg-blue-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+              className="bg-teal-600 text-white mt-3 hover:bg-teal-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
             >
               <CiPizza />
               <span>Personnaliser</span>
