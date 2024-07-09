@@ -54,6 +54,9 @@ export default function CartSidebar() {
                 <div className="text-black font-bold text-center">
                   {item.articleName}
                 </div>
+                <div className="text-black text-center">
+                  {item.taille} {item.tailleUnite}
+                </div>
                 <div className="text-red-500 font-bold text-center">
                   {item.prixTtc} €
                 </div>

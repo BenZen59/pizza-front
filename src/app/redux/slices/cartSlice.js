@@ -21,13 +21,23 @@ const cartSlice = createSlice({
       return { ...state, ...action.payload };
     },
     addToCart: (state, action) => {
-      const { idArticle, qty, prixTtc, image, articleName } = action.payload;
+      const {
+        idArticle,
+        qty,
+        prixTtc,
+        image,
+        articleName,
+        taille,
+        tailleUnite,
+      } = action.payload;
 
-      // Calculer la quantité totale actuelle dans le panier
-      const totalQty = state.cartItems.reduce(
-        (total, item) => total + item.qty,
-        0
-      );
+      // Calculer la quantité totale actuelle pour cette taille dans le panier
+      const totalQty = state.cartItems.reduce((total, item) => {
+        if (item.idArticle === idArticle && item.taille === taille) {
+          return total + item.qty;
+        }
+        return total;
+      }, 0);
 
       // Vérifier si ajouter cet article dépasserait la limite de 99 articles
       if (totalQty + qty > 99) {
@@ -35,24 +45,39 @@ const cartSlice = createSlice({
         return;
       }
 
-      const existingItem = state.cartItems.find(
-        (item) => item.idArticle === idArticle
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) => item.idArticle === idArticle && item.taille === taille
       );
 
-      if (existingItem) {
-        if (existingItem.qty + qty > 99) {
+      if (existingItemIndex !== -1) {
+        // Si l'article existe déjà, augmenter la quantité
+        const existingItem = state.cartItems[existingItemIndex];
+        const newQty = existingItem.qty + qty;
+        if (newQty > 99) {
           existingItem.qty = 99; // Limiter la quantité à 99
         } else {
-          existingItem.qty += qty;
+          existingItem.qty = newQty;
         }
       } else {
-        state.cartItems.push({ idArticle, qty, prixTtc, image, articleName });
+        // Sinon, ajouter un nouvel article
+        state.cartItems.push({
+          idArticle,
+          qty,
+          prixTtc,
+          image,
+          articleName,
+          taille,
+          tailleUnite,
+        });
       }
 
+      // Mettre à jour le prix total du panier
       state.totalPrice = state.cartItems.reduce(
         (total, item) => total + item.prixTtc * item.qty,
         0
       );
+
+      // Sauvegarder le panier dans les cookies
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
     removeFromCart: (state, action) => {
