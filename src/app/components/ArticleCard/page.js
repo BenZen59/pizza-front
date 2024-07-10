@@ -14,11 +14,13 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "@/app/redux/slices/cartSlice";
 import pizzaApi from "../../api/pizzaApi";
 import Image from "next/image";
+import PersonnaliserCard from "../PersonnaliserCard/page";
 
 export default function ArticleCard({ selectedCategorie }) {
   const [articles, setArticles] = useState([]);
   const [taille, setTaille] = useState(26); // Taille par défaut, peut être modifiée si nécessaire
   const [allArticles, setAllArticles] = useState([]); // Tous les articles non filtrés
+  const [selectedArticle, setSelectedArticle] = useState(null); // State for selected article to customize
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,6 +57,14 @@ export default function ArticleCard({ selectedCategorie }) {
 
   const addToCartHandler = (item) => {
     dispatch(addToCart({ ...item, qty: 1 }));
+  };
+
+  const customizeHandler = (item) => {
+    setSelectedArticle(item);
+  };
+
+  const closeHandler = () => {
+    setSelectedArticle(null);
   };
 
   return (
@@ -94,13 +104,11 @@ export default function ArticleCard({ selectedCategorie }) {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-10 pl-40 pr-12 pt-8 pb-8 w-[95%]">
-        {" "}
-        {/* Ajouter du padding à droite ici */}
+      <div className="flex flex-wrap gap-10 pl-40 pr-12 pt-8 pb-8 w-[95%] relative">
         {articles.map((item, index) => (
           <div
             key={index}
-            className="bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4" // Ajouter une marge inférieure
+            className="bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4"
           >
             <div className="flex justify-center items-center h-[150px]">
               <Image
@@ -122,6 +130,7 @@ export default function ArticleCard({ selectedCategorie }) {
             <Button
               radius="full"
               className="bg-teal-600 text-white mt-3 hover:bg-teal-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+              onClick={() => customizeHandler(item)}
             >
               <CiPizza />
               <span>Personnaliser</span>
@@ -137,6 +146,22 @@ export default function ArticleCard({ selectedCategorie }) {
           </div>
         ))}
       </div>
+
+      {selectedArticle && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-75"></div>
+          <PersonnaliserCard
+            idArticle={selectedArticle.id}
+            prixTtc={selectedArticle.prixTtc}
+            image={selectedArticle.image}
+            articleName={selectedArticle.articleName}
+            description={selectedArticle.description}
+            taille={selectedArticle.taille}
+            tailleUnite={selectedArticle.tailleUnite}
+            onClose={closeHandler}
+          />
+        </div>
+      )}
     </>
   );
 }
