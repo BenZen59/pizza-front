@@ -81,48 +81,61 @@ const cartSlice = createSlice({
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
     removeFromCart: (state, action) => {
-      const idToRemove = action.payload;
+      const { idArticle, taille } = action.payload; // suppose que action.payload contient idArticle et taille
       const itemToRemove = state.cartItems.find(
-        (item) => item.idArticle === idToRemove
+        (item) => item.idArticle === idArticle && item.taille === taille
       );
 
       if (itemToRemove) {
         state.totalPrice -= itemToRemove.prixTtc * itemToRemove.qty;
         state.cartItems = state.cartItems.filter(
-          (item) => item.idArticle !== idToRemove
+          (item) => !(item.idArticle === idArticle && item.taille === taille)
         );
       }
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
+
+    hideLoading: (state) => {
+      state.loading = false;
+    },
+
     hideLoading: (state) => {
       state.loading = false;
     },
     updateQuantity: (state, action) => {
-      const { id, qty } = action.payload;
+      const { idArticle, taille, qty } = action.payload;
       const existingItem = state.cartItems.find(
-        (item) => item.idArticle === id
+        (item) => item.idArticle === idArticle && item.taille === taille
       );
 
       if (existingItem) {
+        // Calculer la nouvelle quantité totale si on ajoute la quantité demandée
         const totalQty = state.cartItems.reduce(
-          (total, item) => total + item.qty,
+          (total, item) =>
+            total +
+            (item.idArticle === idArticle && item.taille === taille
+              ? qty - item.qty
+              : item.qty),
           0
         );
+
+        // Vérifier si la limite de 99 articles est atteinte
         if (totalQty > 98 && qty > existingItem.qty) {
           alert("La limite de 99 articles est atteinte !");
           return;
         }
 
+        // Si la quantité demandée est <= 0, supprimer l'article du panier
         if (qty <= 0) {
           state.cartItems = state.cartItems.filter(
-            (item) => item.idArticle !== id
+            (item) => !(item.idArticle === idArticle && item.taille === taille)
           );
-        } else if (qty > 99) {
-          existingItem.qty = 99; // Limiter la quantité à 99
         } else {
-          existingItem.qty = qty;
+          // Sinon, mettre à jour la quantité de l'article
+          existingItem.qty = Math.min(qty, 99); // Limiter la quantité à 99
         }
 
+        // Recalculer le prix total
         state.totalPrice = state.cartItems.reduce(
           (total, item) => total + item.prixTtc * item.qty,
           0

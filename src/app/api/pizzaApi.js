@@ -13,9 +13,9 @@ const pizzaApi = {
   getArticleWithTypeProduit: (idTypeProduit) => {
     return axios.get(`/api/articles/typeProduit/${idTypeProduit}`);
   },
-  // getArticleWithTypeProduitAndBase: (typeProduit, base) => {
-  //   return axios.get(`/api/articles/typeProduitAndBase/${typeProduit}/${base}`);
-  // },
+  getCompositionPizza: (idArticle) => {
+    return axios.get(`api/compositions/${idArticle}`);
+  },
 };
 
 export default pizzaApi;
