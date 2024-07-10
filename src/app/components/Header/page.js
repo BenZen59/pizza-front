@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { GiFullPizza } from "react-icons/gi";
 import { BsCart4 } from "react-icons/bs";
@@ -11,7 +11,10 @@ export default function Header() {
   const cartItems = useSelector((state) => state.cart.cartItems);
 
   // Calculer le nombre total d'articles dans le panier
-  const totalItems = cartItems.reduce((total, item) => total + item.qty, 0);
+  const totalItems = useMemo(
+    () => cartItems.reduce((total, item) => total + item.qty, 0),
+    [cartItems]
+  );
 
   useEffect(() => {
     // Initialize cart from cookies on client-side
@@ -25,6 +28,12 @@ export default function Header() {
     console.log(`Total items in cart: ${totalItems}`);
   }, [totalItems]);
 
+  // Fonction pour formatter le nombre d'articles
+  const formatTotalItems = (total) => {
+    // Limiter le nombre à 99 maximum
+    return total > 99 ? "99+" : total.toString();
+  };
+
   return (
     <header>
       <nav className="flex justify-between items-center h-12 px-4 shadow-md bg-black text-white">
@@ -32,13 +41,13 @@ export default function Header() {
           L'atelier Pizza
           <GiFullPizza className="mt-1 ml-4" />
         </Link>
-        <div className="pr-10 flex relative">
+        <div className="pr-10 flex relative items-center">
           <Link href="/cart" className="text-xl relative">
-            <BsCart4 />
+            <BsCart4 className="mr-2" /> {/* Ajout de marge à droite */}
           </Link>
           {typeof window !== "undefined" && (
-            <span className="absolute font-bold text-red-500 text-xl ml-1 mt-[-5px] top-0 right-0 w-7 h-7 flex items-center justify-center bg-white rounded-full">
-              {totalItems}
+            <span className="absolute font-bold text-red-500 text-xl ml-1 mt-[-5px] top-0 right-0 w-10 h-7 flex items-center justify-center bg-white rounded-md">
+              {formatTotalItems(totalItems)}
             </span>
           )}
         </div>

@@ -109,38 +109,34 @@ const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        // Calculer la nouvelle quantité totale si on ajoute la quantité demandée
-        const totalQty = state.cartItems.reduce(
-          (total, item) =>
-            total +
-            (item.idArticle === idArticle && item.taille === taille
-              ? qty - item.qty
-              : item.qty),
-          0
-        );
-
-        // Vérifier si la limite de 99 articles est atteinte
-        if (totalQty > 98 && qty > existingItem.qty) {
-          alert("La limite de 99 articles est atteinte !");
-          return;
-        }
-
-        // Si la quantité demandée est <= 0, supprimer l'article du panier
+        // If the requested quantity is <= 0, remove the item from the cart
         if (qty <= 0) {
           state.cartItems = state.cartItems.filter(
             (item) => !(item.idArticle === idArticle && item.taille === taille)
           );
         } else {
-          // Sinon, mettre à jour la quantité de l'article
-          existingItem.qty = Math.min(qty, 99); // Limiter la quantité à 99
+          // Otherwise, update the quantity of the item
+          existingItem.qty = qty;
         }
-
-        // Recalculer le prix total
-        state.totalPrice = state.cartItems.reduce(
-          (total, item) => total + item.prixTtc * item.qty,
-          0
-        );
+      } else {
+        // If the item doesn't exist in the cart, add it if qty > 0
+        if (qty > 0) {
+          state.cartItems.push({
+            idArticle,
+            taille,
+            qty,
+            // You may need to add other properties from your payload here
+          });
+        }
       }
+
+      // Recalculate the total price
+      state.totalPrice = state.cartItems.reduce(
+        (total, item) => total + item.prixTtc * item.qty,
+        0
+      );
+
+      // Update the cart in cookies
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
   },
