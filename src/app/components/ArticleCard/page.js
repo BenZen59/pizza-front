@@ -108,7 +108,9 @@ export default function ArticleCard({ selectedCategorie }) {
         {articles.map((item, index) => (
           <div
             key={index}
-            className="bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4"
+            className={`bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4 ${
+              selectedCategorie !== 1 ? "h-[475px]" : ""
+            }`}
           >
             <div className="flex justify-center items-center h-[150px]">
               <Image
@@ -127,14 +129,18 @@ export default function ArticleCard({ selectedCategorie }) {
               Taille de l'article : {item.taille} {item.tailleUnite}
             </p>
             <p className="text-2xl text-red-500 mt-3">{item.prixTtc} €</p>
-            <Button
-              radius="full"
-              className="bg-teal-600 text-white mt-3 hover:bg-teal-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
-              onClick={() => customizeHandler(item)}
-            >
-              <CiPizza />
-              <span>Personnaliser</span>
-            </Button>
+
+            {selectedCategorie === 1 && (
+              <Button
+                radius="full"
+                className="bg-teal-600 text-white mt-3 hover:bg-teal-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
+                onClick={() => customizeHandler(item)}
+              >
+                <CiPizza />
+                <span>Personnaliser</span>
+              </Button>
+            )}
+
             <Button
               radius="full"
               className="bg-green-600 text-white mt-3 hover:bg-green-700 h-[50px] w-[220px] flex items-center justify-center space-x-2 mx-auto text-lg"
