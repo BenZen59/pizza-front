@@ -153,9 +153,33 @@ export default function PersonnaliserCard({
           </div>
         </div>
         <div className="flex justify-between mt-6">
-          <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-            Ajouter au panier
-          </button>
+          <div className="flex">
+            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4">
+              Ajouter au panier
+            </button>
+            <div className="flex">
+              <p className="mr-4 mt-2">Quantité</p>
+              <div className="mt-2 flex justify-around items-center text-black space-x-2">
+                <button
+                  className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
+                  onClick={() => updateQuantityHandler(item, item.qty - 1)}
+                >
+                  <FaMinus />
+                </button>
+                <input
+                  type="text"
+                  value={1}
+                  className="w-12 h-8 text-center border border-gray-500 rounded-md"
+                />
+                <button
+                  className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
+                  onClick={() => updateQuantityHandler(item, item.qty + 1)}
+                >
+                  <FaPlus />
+                </button>
+              </div>
+            </div>
+          </div>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             onClick={onClose}
