@@ -3,6 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "@/app/redux/slices/cartSlice";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 import Image from "next/image";
 
 export default function CartSidebar() {
@@ -24,7 +25,7 @@ export default function CartSidebar() {
   };
 
   return (
-    <div className="fixed right-0 top-0 w-48 h-screen shadow-lg border border-opacity-20 border-black flex flex-col pt-10 z-10">
+    <div className="fixed right-0 top-0 w-52 h-screen shadow-lg border border-opacity-20 border-black flex flex-col pt-10 z-10">
       {loading ? (
         <div className="py-5 px-2 text-black">Chargement ...</div>
       ) : cartItems.length === 0 ? (
@@ -67,37 +68,39 @@ export default function CartSidebar() {
                 <div className="text-red-500 font-bold text-center">
                   {item.prixTtc} €
                 </div>
-                <div className="mt-2 flex justify-around items-center text-black space-x-2">
+                <div className="flex">
+                  <div className="mt-2 flex justify-around items-center text-black space-x-2">
+                    <button
+                      className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
+                      onClick={() => updateQuantityHandler(item, item.qty - 1)}
+                    >
+                      <FaMinus />
+                    </button>
+                    <input
+                      type="text"
+                      value={item.qty}
+                      onChange={(e) =>
+                        updateQuantityHandler(item, parseInt(e.target.value))
+                      }
+                      className="w-12 h-8 text-center border"
+                    />
+                    <button
+                      className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
+                      onClick={() => updateQuantityHandler(item, item.qty + 1)}
+                    >
+                      <FaPlus />
+                    </button>
+                  </div>
+
                   <button
-                    className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
-                    onClick={() => updateQuantityHandler(item, item.qty - 1)}
-                  >
-                    <FaMinus />
-                  </button>
-                  <input
-                    type="text"
-                    value={item.qty}
-                    onChange={(e) =>
-                      updateQuantityHandler(item, parseInt(e.target.value))
+                    className="bg-red-500 text-white rounded-md px-2 py-1 h-8 w-8 hover:bg-red-600 mt-2 ml-4"
+                    onClick={() =>
+                      removeFromCartHandler(item.idArticle, item.taille)
                     }
-                    className="w-12 h-8 text-center border"
-                  />
-                  <button
-                    className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
-                    onClick={() => updateQuantityHandler(item, item.qty + 1)}
                   >
-                    <FaPlus />
+                    <MdOutlineDeleteOutline />
                   </button>
                 </div>
-
-                <button
-                  className="bg-red-500 text-white rounded-full mt-4 px-3 py-1 hover:bg-red-600"
-                  onClick={() =>
-                    removeFromCartHandler(item.idArticle, item.taille)
-                  }
-                >
-                  Supprimer
-                </button>
               </div>
             ))}
           </div>

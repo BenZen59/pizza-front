@@ -16,6 +16,9 @@ const pizzaApi = {
   getCompositionPizza: (idArticle) => {
     return axios.get(`api/compositions/${idArticle}`);
   },
+  getAllIngredients: () => {
+    return axios.get(`api/ingredients/`);
+  },
 };
 
 export default pizzaApi;

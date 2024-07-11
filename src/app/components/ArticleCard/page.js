@@ -109,7 +109,7 @@ export default function ArticleCard({ selectedCategorie }) {
           <div
             key={index}
             className={`bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4 ${
-              selectedCategorie !== 1 ? "h-[475px]" : ""
+              selectedCategorie !== 1 ? "h-[470px]" : ""
             }`}
           >
             <div className="flex justify-center items-center h-[150px]">
@@ -157,7 +157,7 @@ export default function ArticleCard({ selectedCategorie }) {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="absolute inset-0 bg-black opacity-75"></div>
           <PersonnaliserCard
-            idArticle={selectedArticle.id}
+            idArticle={selectedArticle.idArticle}
             prixTtc={selectedArticle.prixTtc}
             image={selectedArticle.image}
             articleName={selectedArticle.articleName}
