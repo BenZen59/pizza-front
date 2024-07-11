@@ -82,7 +82,7 @@ export default function CartSidebar() {
                       onChange={(e) =>
                         updateQuantityHandler(item, parseInt(e.target.value))
                       }
-                      className="w-12 h-8 text-center border"
+                      className="w-12 h-8 text-center border border-gray-500 rounded-md"
                     />
                     <button
                       className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"

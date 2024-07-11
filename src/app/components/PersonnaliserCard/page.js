@@ -98,7 +98,7 @@ export default function PersonnaliserCard({
                     onChange={(e) =>
                       updateQuantityHandler(item, parseInt(e.target.value))
                     }
-                    className="w-12 h-8 text-center border"
+                    className="w-12 h-8 text-center border border-gray-500 rounded-md"
                   />
                   <button
                     className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
@@ -138,7 +138,7 @@ export default function PersonnaliserCard({
                       onChange={(e) =>
                         updateQuantityHandler(item, parseInt(e.target.value))
                       }
-                      className="w-12 h-8 text-center border"
+                      className="w-12 h-8 text-center border border-gray-500 rounded-md"
                     />
                     <button
                       className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
@@ -152,7 +152,10 @@ export default function PersonnaliserCard({
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-between mt-6">
+          <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Ajouter au panier
+          </button>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             onClick={onClose}
