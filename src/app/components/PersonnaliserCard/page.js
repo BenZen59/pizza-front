@@ -51,8 +51,8 @@ export default function PersonnaliserCard({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black opacity-10"></div>
-      <div className="relative w-[1250px] h-[790px] bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md z-10 overflow-y-auto">
-        <div className="flex justify-center w-[700px] h-auto bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md mt-8 text-center ml-[25%]">
+      <div className="relative w-[1000Spx] h-[790px] bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md z-10 overflow-y-auto">
+        <div className="flex justify-center w-[700px] h-auto bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md mt-8 text-center ml-[15%]">
           <div className="flex justify-center mt-2">
             <Image
               src={`/images/${image}`}
@@ -73,14 +73,14 @@ export default function PersonnaliserCard({
         </div>
         <div className="flex mt-8 space-x-4">
           {/* Composition */}
-          <div className="w-[600px] max-h-[400px] bg-white text-black shadow-lg border-opacity-20 border-black border rounded-md text-center pl-4 pt-4 pr-4 overflow-y-auto">
+          <div className="w-[400px] max-h-[400px] bg-white text-black shadow-lg border-opacity-20 border-black border rounded-md text-center pl-4 pt-4 pr-4 overflow-y-auto">
             <p className="text-left text-2xl font-semibold mb-2">
               Compositions
             </p>
             {compositions.map((item) => (
               <div
                 key={item.id}
-                className="flex w-[550px] h-auto bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md mb-4"
+                className="flex w-[360px] h-auto bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md mb-4"
               >
                 <div className="flex-grow">
                   <div className="mt-2 mr-1 w-[200px]">{item.ingredients}</div>

@@ -4,12 +4,6 @@ const pizzaApi = {
   getTypeProduit: () => {
     return axios.get(`/api/type-produits/`);
   },
-  getAllArticle: () => {
-    return axios.get(`/api/articles/`);
-  },
-  getArticleWithTaille: (idArticle, taille) => {
-    return axios.get(`/api/articles/${idArticle}/${taille}`);
-  },
   getArticleWithTypeProduit: (idTypeProduit) => {
     return axios.get(`/api/articles/typeProduit/${idTypeProduit}`);
   },
