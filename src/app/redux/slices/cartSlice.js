@@ -29,6 +29,8 @@ const cartSlice = createSlice({
         articleName,
         taille,
         tailleUnite,
+        supplements = [], // Nouveaux suppléments
+        compositions = [], // Nouvelles compositions
       } = action.payload;
 
       // Calculer la quantité totale actuelle pour cette taille dans le panier
@@ -58,6 +60,9 @@ const cartSlice = createSlice({
         } else {
           existingItem.qty = newQty;
         }
+        // Mettre à jour les suppléments et compositions
+        existingItem.supplements = supplements;
+        existingItem.compositions = compositions;
       } else {
         // Sinon, ajouter un nouvel article
         state.cartItems.push({
@@ -68,14 +73,27 @@ const cartSlice = createSlice({
           articleName,
           taille,
           tailleUnite,
+          supplements,
+          compositions,
         });
       }
 
       // Mettre à jour le prix total du panier
-      state.totalPrice = state.cartItems.reduce(
-        (total, item) => total + item.prixTtc * item.qty,
-        0
-      );
+      state.totalPrice = state.cartItems.reduce((total, item) => {
+        const supplementsPrice = item.supplements.reduce(
+          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
+          0
+        );
+        const compositionsPrice = item.compositions.reduce(
+          (compTotal, composition) =>
+            compTotal + composition.prix * composition.qty,
+          0
+        );
+        return (
+          total +
+          (item.prixTtc + supplementsPrice + compositionsPrice) * item.qty
+        );
+      }, 0);
 
       // Sauvegarder le panier dans les cookies
       Cookies.set("cart", JSON.stringify({ ...state }));
@@ -87,7 +105,19 @@ const cartSlice = createSlice({
       );
 
       if (itemToRemove) {
-        state.totalPrice -= itemToRemove.prixTtc * itemToRemove.qty;
+        const supplementsPrice = itemToRemove.supplements.reduce(
+          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
+          0
+        );
+        const compositionsPrice = itemToRemove.compositions.reduce(
+          (compTotal, composition) =>
+            compTotal + composition.prix * composition.qty,
+          0
+        );
+
+        state.totalPrice -=
+          (itemToRemove.prixTtc + supplementsPrice + compositionsPrice) *
+          itemToRemove.qty;
         state.cartItems = state.cartItems.filter(
           (item) => !(item.idArticle === idArticle && item.taille === taille)
         );
@@ -99,9 +129,6 @@ const cartSlice = createSlice({
       state.loading = false;
     },
 
-    hideLoading: (state) => {
-      state.loading = false;
-    },
     updateQuantity: (state, action) => {
       const { idArticle, taille, qty } = action.payload;
       const existingItem = state.cartItems.find(
@@ -131,10 +158,21 @@ const cartSlice = createSlice({
       }
 
       // Recalculate the total price
-      state.totalPrice = state.cartItems.reduce(
-        (total, item) => total + item.prixTtc * item.qty,
-        0
-      );
+      state.totalPrice = state.cartItems.reduce((total, item) => {
+        const supplementsPrice = item.supplements.reduce(
+          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
+          0
+        );
+        const compositionsPrice = item.compositions.reduce(
+          (compTotal, composition) =>
+            compTotal + composition.prix * composition.qty,
+          0
+        );
+        return (
+          total +
+          (item.prixTtc + supplementsPrice + compositionsPrice) * item.qty
+        );
+      }, 0);
 
       // Update the cart in cookies
       Cookies.set("cart", JSON.stringify({ ...state }));
