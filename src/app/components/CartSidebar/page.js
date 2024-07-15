@@ -10,8 +10,14 @@ export default function CartSidebar() {
   const { loading, cartItems, totalPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  const removeFromCartHandler = (idArticle, taille) => {
-    dispatch(removeFromCart({ idArticle, taille }));
+  const removeFromCartHandler = (item) => {
+    dispatch(
+      removeFromCart({
+        idArticle: item.idArticle,
+        taille: item.taille,
+        compositions: item.compositions,
+      })
+    );
   };
 
   const updateQuantityHandler = (item, newQty) => {
@@ -20,6 +26,7 @@ export default function CartSidebar() {
         idArticle: item.idArticle,
         taille: item.taille,
         qty: newQty,
+        compositions: item.compositions,
       })
     );
   };
@@ -44,7 +51,9 @@ export default function CartSidebar() {
           <div className="flex-1 overflow-y-auto">
             {cartItems.map((item) => (
               <div
-                key={item.idArticle + item.taille} // utilisation d'une clé unique
+                key={`${item.idArticle}-${item.taille}-${JSON.stringify(
+                  item.compositions
+                )}`}
                 className="p-4 flex flex-col items-center border-b border-b-gray-600"
               >
                 <Link
@@ -69,15 +78,17 @@ export default function CartSidebar() {
                   {item.prixTtc} €
                 </div>
 
-                {/* Afficher les suppléments */}
-                {item.supplements && item.supplements.length > 0 && (
-                  <div className="text-black text-center mt-2">
-                    <div className="font-bold">Suppléments:</div>
-                    {item.supplements.map((supp) => (
-                      <div key={supp.id} className="text-sm">
-                        {supp.libelle} x {supp.qty} (+{supp.prix.toFixed(2)} €)
-                      </div>
-                    ))}
+                {/* Affichage des compositions */}
+                {item.compositions && item.compositions.length > 0 && (
+                  <div className=" text-black mt-2 text-center">
+                    <div className="font-semibold">Compositions</div>
+                    <div>
+                      {item.compositions.map((comp, index) => (
+                        <p key={index}>
+                          {comp.libelle} ({comp.qty})
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -107,9 +118,7 @@ export default function CartSidebar() {
 
                   <button
                     className="bg-red-500 text-white rounded-md px-2 py-1 h-8 w-8 hover:bg-red-600 mt-2 ml-4"
-                    onClick={() =>
-                      removeFromCartHandler(item.idArticle, item.taille)
-                    }
+                    onClick={() => removeFromCartHandler(item)}
                   >
                     <MdOutlineDeleteOutline />
                   </button>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import pizzaApi from "@/app/api/pizzaApi";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { addToCartPersonnaliser } from "@/app/redux/slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function PersonnaliserCard({
   idArticle,
@@ -17,6 +19,7 @@ export default function PersonnaliserCard({
   const [ingredients, setIngredients] = useState([]);
   const [prixTotal, setPrixTotal] = useState(prixTtc);
   const [quantity, setQuantity] = useState(1); // State for quantity
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +96,31 @@ export default function PersonnaliserCard({
   const handleQuantityChange = (newQty) => {
     if (newQty < 1) return;
     setQuantity(newQty);
+  };
+
+  const handleAddToCart = () => {
+    const itemData = {
+      idArticle,
+      qty: quantity,
+      prixTtc: parseFloat(prixTotal * quantity),
+      image,
+      articleName,
+      taille,
+      tailleUnite,
+      compositions: compositions
+        .filter((comp) => comp.quantite > 0)
+        .map((comp) => ({
+          libelle: comp.ingredients,
+          qty: comp.quantite,
+          prix: comp.prix,
+        })), // Include only selected supplements
+    };
+    console.log(itemData);
+
+    // Dispatch action to add the item to the cart
+    dispatch(addToCartPersonnaliser(itemData));
+    // Close the modal after adding to cart
+    onClose();
   };
 
   return (
@@ -234,7 +262,10 @@ export default function PersonnaliserCard({
         </div>
         <div className="flex justify-between mt-6">
           <div className="flex">
-            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4">
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mr-4"
+              onClick={handleAddToCart} // No item parameter
+            >
               Ajouter au panier
             </button>
             <div className="flex">

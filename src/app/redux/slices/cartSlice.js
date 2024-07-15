@@ -29,11 +29,9 @@ const cartSlice = createSlice({
         articleName,
         taille,
         tailleUnite,
-        supplements = [], // Nouveaux suppléments
-        compositions = [], // Nouvelles compositions
+        compositions = [],
       } = action.payload;
 
-      // Calculer la quantité totale actuelle pour cette taille dans le panier
       const totalQty = state.cartItems.reduce((total, item) => {
         if (item.idArticle === idArticle && item.taille === taille) {
           return total + item.qty;
@@ -41,30 +39,27 @@ const cartSlice = createSlice({
         return total;
       }, 0);
 
-      // Vérifier si ajouter cet article dépasserait la limite de 99 articles
       if (totalQty + qty > 99) {
         alert("La limite de 99 articles est atteinte !");
         return;
       }
 
       const existingItemIndex = state.cartItems.findIndex(
-        (item) => item.idArticle === idArticle && item.taille === taille
+        (item) =>
+          item.idArticle === idArticle &&
+          item.taille === taille &&
+          JSON.stringify(item.compositions) === JSON.stringify(compositions)
       );
 
       if (existingItemIndex !== -1) {
-        // Si l'article existe déjà, augmenter la quantité
         const existingItem = state.cartItems[existingItemIndex];
         const newQty = existingItem.qty + qty;
         if (newQty > 99) {
-          existingItem.qty = 99; // Limiter la quantité à 99
+          existingItem.qty = 99;
         } else {
           existingItem.qty = newQty;
         }
-        // Mettre à jour les suppléments et compositions
-        existingItem.supplements = supplements;
-        existingItem.compositions = compositions;
       } else {
-        // Sinon, ajouter un nouvel article
         state.cartItems.push({
           idArticle,
           qty,
@@ -73,55 +68,68 @@ const cartSlice = createSlice({
           articleName,
           taille,
           tailleUnite,
-          supplements,
           compositions,
         });
       }
 
-      // Mettre à jour le prix total du panier
       state.totalPrice = state.cartItems.reduce((total, item) => {
-        const supplementsPrice = item.supplements.reduce(
-          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
-          0
-        );
-        const compositionsPrice = item.compositions.reduce(
-          (compTotal, composition) =>
-            compTotal + composition.prix * composition.qty,
-          0
-        );
-        return (
-          total +
-          (item.prixTtc + supplementsPrice + compositionsPrice) * item.qty
-        );
+        return total + item.prixTtc * item.qty;
       }, 0);
 
-      // Sauvegarder le panier dans les cookies
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
-    removeFromCart: (state, action) => {
-      const { idArticle, taille } = action.payload; // suppose que action.payload contient idArticle et taille
-      const itemToRemove = state.cartItems.find(
-        (item) => item.idArticle === idArticle && item.taille === taille
+
+    addToCartPersonnaliser: (state, action) => {
+      const {
+        idArticle,
+        qty,
+        prixTtc,
+        image,
+        articleName,
+        taille,
+        tailleUnite,
+        compositions = [],
+      } = action.payload;
+
+      const totalQty = state.cartItems.reduce((total, item) => {
+        if (item.idArticle === idArticle && item.taille === taille) {
+          return total + item.qty;
+        }
+        return total;
+      }, 0);
+
+      if (totalQty + qty > 99) {
+        alert("La limite de 99 articles est atteinte !");
+        return;
+      }
+
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) =>
+          item.idArticle === idArticle &&
+          item.taille === taille &&
+          JSON.stringify(item.compositions) === JSON.stringify(compositions)
       );
 
-      if (itemToRemove) {
-        const supplementsPrice = itemToRemove.supplements.reduce(
-          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
-          0
-        );
-        const compositionsPrice = itemToRemove.compositions.reduce(
-          (compTotal, composition) =>
-            compTotal + composition.prix * composition.qty,
-          0
-        );
-
-        state.totalPrice -=
-          (itemToRemove.prixTtc + supplementsPrice + compositionsPrice) *
-          itemToRemove.qty;
-        state.cartItems = state.cartItems.filter(
-          (item) => !(item.idArticle === idArticle && item.taille === taille)
-        );
+      if (existingItemIndex !== -1) {
+        const existingItem = state.cartItems[existingItemIndex];
+        existingItem.qty += qty;
+      } else {
+        state.cartItems.push({
+          idArticle,
+          qty,
+          prixTtc,
+          image,
+          articleName,
+          taille,
+          tailleUnite,
+          compositions,
+        });
       }
+
+      state.totalPrice = state.cartItems.reduce((total, item) => {
+        return total + item.prixTtc * item.qty;
+      }, 0);
+
       Cookies.set("cart", JSON.stringify({ ...state }));
     },
 
@@ -129,53 +137,58 @@ const cartSlice = createSlice({
       state.loading = false;
     },
 
-    updateQuantity: (state, action) => {
-      const { idArticle, taille, qty } = action.payload;
-      const existingItem = state.cartItems.find(
-        (item) => item.idArticle === idArticle && item.taille === taille
+    removeFromCart: (state, action) => {
+      const { idArticle, taille, compositions = [] } = action.payload;
+      const itemToRemoveIndex = state.cartItems.findIndex(
+        (item) =>
+          item.idArticle === idArticle &&
+          item.taille === taille &&
+          JSON.stringify(item.compositions) === JSON.stringify(compositions)
       );
 
-      if (existingItem) {
-        // If the requested quantity is <= 0, remove the item from the cart
-        if (qty <= 0) {
-          state.cartItems = state.cartItems.filter(
-            (item) => !(item.idArticle === idArticle && item.taille === taille)
-          );
-        } else {
-          // Otherwise, update the quantity of the item
-          existingItem.qty = qty;
-        }
-      } else {
-        // If the item doesn't exist in the cart, add it if qty > 0
-        if (qty > 0) {
-          state.cartItems.push({
-            idArticle,
-            taille,
-            qty,
-            // You may need to add other properties from your payload here
-          });
-        }
-      }
-
-      // Recalculate the total price
-      state.totalPrice = state.cartItems.reduce((total, item) => {
-        const supplementsPrice = item.supplements.reduce(
-          (subTotal, supplement) => subTotal + supplement.prix * supplement.qty,
-          0
-        );
-        const compositionsPrice = item.compositions.reduce(
+      if (itemToRemoveIndex !== -1) {
+        const itemToRemove = state.cartItems[itemToRemoveIndex];
+        const compositionsPrice = itemToRemove.compositions.reduce(
           (compTotal, composition) =>
             compTotal + composition.prix * composition.qty,
           0
         );
-        return (
-          total +
-          (item.prixTtc + supplementsPrice + compositionsPrice) * item.qty
-        );
-      }, 0);
 
-      // Update the cart in cookies
+        state.totalPrice -=
+          (itemToRemove.prixTtc + compositionsPrice) * itemToRemove.qty;
+        state.cartItems.splice(itemToRemoveIndex, 1); // Remove the item from the array
+      }
+
       Cookies.set("cart", JSON.stringify({ ...state }));
+    },
+
+    updateQuantity: (state, action) => {
+      const { idArticle, taille, qty, compositions = [] } = action.payload;
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) =>
+          item.idArticle === idArticle &&
+          item.taille === taille &&
+          JSON.stringify(item.compositions) === JSON.stringify(compositions)
+      );
+
+      if (existingItemIndex !== -1) {
+        const existingItem = state.cartItems[existingItemIndex];
+        // If the requested quantity is <= 0, remove the item from the cart
+        if (qty <= 0) {
+          state.cartItems.splice(existingItemIndex, 1); // Remove the item from the array
+        } else {
+          // Otherwise, update the quantity of the item
+          existingItem.qty = qty;
+        }
+
+        // Recalculate the total price
+        state.totalPrice = state.cartItems.reduce((total, item) => {
+          return total + item.prixTtc * item.qty;
+        }, 0);
+
+        // Update the cart in cookies
+        Cookies.set("cart", JSON.stringify({ ...state }));
+      }
     },
   },
 });
@@ -183,6 +196,7 @@ const cartSlice = createSlice({
 export const {
   initializeCart,
   addToCart,
+  addToCartPersonnaliser,
   removeFromCart,
   hideLoading,
   updateQuantity,
