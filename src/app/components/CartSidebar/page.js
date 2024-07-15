@@ -68,6 +68,19 @@ export default function CartSidebar() {
                 <div className="text-red-500 font-bold text-center">
                   {item.prixTtc} €
                 </div>
+
+                {/* Afficher les suppléments */}
+                {item.supplements && item.supplements.length > 0 && (
+                  <div className="text-black text-center mt-2">
+                    <div className="font-bold">Suppléments:</div>
+                    {item.supplements.map((supp) => (
+                      <div key={supp.id} className="text-sm">
+                        {supp.libelle} x {supp.qty} (+{supp.prix.toFixed(2)} €)
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="flex">
                   <div className="mt-2 flex justify-around items-center text-black space-x-2">
                     <button

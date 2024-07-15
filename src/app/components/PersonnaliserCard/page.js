@@ -16,6 +16,7 @@ export default function PersonnaliserCard({
   const [compositions, setCompositions] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [prixTotal, setPrixTotal] = useState(prixTtc);
+  const [quantity, setQuantity] = useState(1); // State for quantity
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +90,11 @@ export default function PersonnaliserCard({
     return compositionItem ? compositionItem.quantite : 0;
   };
 
+  const handleQuantityChange = (newQty) => {
+    if (newQty < 1) return;
+    setQuantity(newQty);
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black opacity-10"></div>
@@ -106,7 +112,7 @@ export default function PersonnaliserCard({
           <div className="mt-10">
             <p className="text-2xl font-semibold">{articleName}</p>
             <p className="text-xl text-red-500 mt-2">
-              {prixTotal.toFixed(2)} €
+              {parseFloat(prixTotal * quantity)} €
             </p>
             <p className="text-sm mt-2 text-gray-500 italic">{description}</p>
             <p className="text-sm mt-2">
@@ -236,18 +242,21 @@ export default function PersonnaliserCard({
               <div className="mt-2 flex justify-around items-center text-black space-x-2">
                 <button
                   className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
-                  onClick={() => updateQuantityHandler(item, item.qty - 1)}
+                  onClick={() => handleQuantityChange(quantity - 1)}
                 >
                   <FaMinus />
                 </button>
                 <input
                   type="text"
-                  value={1}
+                  value={quantity}
+                  onChange={(e) =>
+                    handleQuantityChange(parseInt(e.target.value))
+                  }
                   className="w-12 h-8 text-center border border-gray-500 rounded-md"
                 />
                 <button
                   className="bg-black text-white rounded px-2 py-1 hover:bg-gray-800 h-8 w-8 flex items-center justify-center"
-                  onClick={() => updateQuantityHandler(item, item.qty + 1)}
+                  onClick={() => handleQuantityChange(quantity + 1)}
                 >
                   <FaPlus />
                 </button>
