@@ -8,10 +8,13 @@ const pizzaApi = {
     return axios.get(`/api/articles/typeProduit/${idTypeProduit}`);
   },
   getCompositionPizza: (idArticle) => {
-    return axios.get(`api/compositions/${idArticle}`);
+    return axios.get(`/api/compositions/${idArticle}`);
   },
   getAllIngredients: () => {
-    return axios.get(`api/ingredients/`);
+    return axios.get(`/api/ingredients/`);
+  },
+  getLogin: () => {
+    return axios.get(`/api/register/login`);
   },
 };
 
