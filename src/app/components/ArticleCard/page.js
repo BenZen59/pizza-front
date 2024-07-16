@@ -109,7 +109,7 @@ export default function ArticleCard({ selectedCategorie }) {
           <div
             key={index}
             className={`bg-white text-black p-4 w-[300px] h-[535px] shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4 ${
-              selectedCategorie !== 1 ? "h-[470px]" : ""
+              selectedCategorie !== 1 ? "h-[465px]" : ""
             }`}
           >
             <div className="flex justify-center items-center h-[150px]">
