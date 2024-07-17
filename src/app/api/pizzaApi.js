@@ -13,9 +13,7 @@ const pizzaApi = {
   getAllIngredients: () => {
     return axios.get(`/api/ingredients/`);
   },
-  getLogin: () => {
-    return axios.get(`/api/register/login`);
-  },
+  getLogin: () => `/api/register/login`,
 };
 
 export default pizzaApi;

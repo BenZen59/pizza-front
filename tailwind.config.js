@@ -1,11 +1,12 @@
-const {nextui} = require('@nextui-org/theme');
+const { nextui } = require("@nextui-org/theme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/components/(button|dropdown|ripple|spinner|menu|divider|popover).js"
+    "./src/app/**/*.{js,jsx,ts,tsx}", // Include all relevant paths
+    "./src/app/components/**/*.{js,jsx,ts,tsx}", // Ensure components are included
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/components/(button|dropdown|ripple|spinner|menu|divider|popover).js",
   ],
   theme: {
     extend: {
