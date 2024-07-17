@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { GiFullPizza } from "react-icons/gi";

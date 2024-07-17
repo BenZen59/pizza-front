@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import withAuth from "../../components/withAuth";
-import LogoutButton from "../../components/LogoutButton";
+import HeaderWithoutCart from "../HeaderWithoutCart/page";
 
 // Mock function to simulate fetching user data from an API
 const fetchUserData = async () => {
@@ -45,30 +45,33 @@ function Dashboard() {
   }
 
   return (
-    <div>
-      <LogoutButton />
+    <>
+      <HeaderWithoutCart />
+      <div className="flex justify-center mt-4">
+        <section className="bg-white text-black p-4 w-auto h-auto shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4 mr-4">
+          <h2 className="font-bold text-2xl">Informations</h2>
+          <p className="mt-4">
+            <strong>Nom:</strong> {userData.nom}
+          </p>
+          <p>
+            <strong>Prénom:</strong> {userData.prenom}
+          </p>
+          <p>
+            <strong>Adresse mail:</strong> {userData.adresse_mail}
+          </p>
+          <p>
+            <strong>Téléphone:</strong> {userData.numero_de_telephone}
+          </p>
+        </section>
 
-      <section>
-        <h2>Informations</h2>
-        <p>
-          <strong>Nom:</strong> {userData.nom}
-        </p>
-        <p>
-          <strong>Prénom:</strong> {userData.prenom}
-        </p>
-        <p>
-          <strong>Adresse mail:</strong> {userData.adresse_mail}
-        </p>
-        <p>
-          <strong>Téléphone:</strong> {userData.numero_de_telephone}
-        </p>
-      </section>
-
-      <section>
-        <h2>Ma Liste de Commande</h2>
-        Commande
-      </section>
-    </div>
+        <section className="bg-white text-black p-4 w-[300px] h-auto shadow-lg border-opacity-20 border-black border rounded-md text-center mb-4">
+          <h2 className="font-bold text-2xl ">Ma Liste de Commande</h2>
+          <p className="mt-4">
+            <strong>Commande n°:</strong> 123456789
+          </p>
+        </section>
+      </div>
+    </>
   );
 }
 
