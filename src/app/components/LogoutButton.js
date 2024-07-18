@@ -8,13 +8,13 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/LoginPage");
+    router.push("/");
   };
 
   return (
     <button
       onClick={handleLogout}
-      className="w-[150px] bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200"
+      className="text-center h-10 w-[150px] bg-red-500 text-white font-semibold py-2 rounded-md hover:bg-red-600 transition duration-200"
     >
       Se déconnecter
     </button>
