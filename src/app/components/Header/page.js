@@ -24,7 +24,7 @@ export default function Header() {
   );
 
   useEffect(() => {
-    // Initialize cart from cookies on client-side
+    // Initialiser le panier à partir des cookies côté client
     const persistedState = Cookies.get("cart");
     if (persistedState) {
       dispatch(initializeCart(JSON.parse(persistedState)));
@@ -32,11 +32,11 @@ export default function Header() {
   }, [dispatch]);
 
   useEffect(() => {
-    // Check if user is logged in
+    // Vérifier si le client est connecté
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-      // Fetch user info from API
+
       const fetchUserInfo = async () => {
         try {
           const response = await pizzaApi.getAccountDetail(token);
