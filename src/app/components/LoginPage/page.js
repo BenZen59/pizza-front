@@ -23,7 +23,7 @@ export default function LoginPage() {
       });
       const { token } = response.data;
       localStorage.setItem("token", token);
-      router.push("/Dashboard");
+      router.push("/");
     } catch (error) {
       setErrorMessage("Nom d'utilisateur ou mot de passe incorrect");
     }

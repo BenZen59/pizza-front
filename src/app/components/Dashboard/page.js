@@ -30,6 +30,11 @@ function Dashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
+  };
+
   useEffect(() => {
     // Vérifier si le client est connecté
     const token = localStorage.getItem("token");
