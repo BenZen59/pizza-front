@@ -5,35 +5,10 @@ import withAuth from "../../components/withAuth";
 import HeaderWithoutCart from "../HeaderWithoutCart/page";
 import pizzaApi from "@/app/api/pizzaApi";
 
-// Mock function to simulate fetching user data from an API
-const fetchUserData = async () => {
-  // Replace this with your actual API call
-  return {
-    nom: "Doe",
-    prenom: "John",
-    adresse_mail: "john.doe@example.com",
-    numero_de_telephone: "123-456-7890",
-  };
-};
-
-// Mock function to simulate fetching user orders from an API
-const fetchUserOrders = async () => {
-  // Replace this with your actual API call
-  return [
-    { id: 1, item: "Product 1", quantity: 2, price: 50 },
-    { id: 2, item: "Product 2", quantity: 1, price: 100 },
-  ];
-};
-
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/");
-  };
 
   useEffect(() => {
     // Vérifier si le client est connecté
