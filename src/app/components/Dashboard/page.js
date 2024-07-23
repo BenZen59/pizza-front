@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import withAuth from "../../components/withAuth";
 import HeaderWithoutCart from "../HeaderWithoutCart/page";
+import pizzaApi from "@/app/api/pizzaApi";
 
 // Mock function to simulate fetching user data from an API
 const fetchUserData = async () => {
@@ -26,18 +27,36 @@ const fetchUserOrders = async () => {
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const loadData = async () => {
-      const fetchedUserData = await fetchUserData();
-      setUserData(fetchedUserData);
+    // Vérifier si le client est connecté
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
 
-      const fetchedUserOrders = await fetchUserOrders();
-      setOrders(fetchedUserOrders);
-    };
+      const fetchUserInfo = async () => {
+        try {
+          const response = await pizzaApi.getAccountDetail(token);
+          const prenom = response.data.prenom;
+          const nom = response.data.nom;
+          const telephone = response.data.numeroDeTelephone;
+          const mail = response.data.adresseMail;
+          console.log(prenom + nom);
+          setUserData({
+            nom: nom,
+            prenom: prenom,
+            telephone: telephone,
+            mail: mail,
+          });
+        } catch (error) {
+          console.error("Failed to fetch user info", error);
+        }
+      };
 
-    loadData();
+      fetchUserInfo();
+    }
   }, []);
 
   if (!userData) {
@@ -57,10 +76,10 @@ function Dashboard() {
             <strong>Prénom:</strong> {userData.prenom}
           </p>
           <p>
-            <strong>Adresse mail:</strong> {userData.adresse_mail}
+            <strong>Adresse mail:</strong> {userData.mail}
           </p>
           <p>
-            <strong>Téléphone:</strong> {userData.numero_de_telephone}
+            <strong>Téléphone:</strong> {userData.telephone}
           </p>
         </section>
 
