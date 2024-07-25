@@ -14,6 +14,13 @@ const pizzaApi = {
     return axios.get(`/api/ingredients/`);
   },
   getLogin: () => `/api/register/login`,
+  register: (data) => {
+    return axios.post(`/api/register`, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }); // Assurez-vous qu'il n'y a pas de barre oblique finale
+  },
   getAccountDetail: (token) => {
     return axios.get(`/api/register/accountdetail?token=${token}`);
   },

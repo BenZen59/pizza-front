@@ -6,18 +6,9 @@ import { useRouter } from "next/navigation";
 const LogoutButton = () => {
   const router = useRouter();
 
-  const handleLogout = (event) => {
-    event.preventDefault(); // Empêche la réactualisation de la page
+  const handleLogout = () => {
     localStorage.removeItem("token");
-
-    // Rediriger vers la page d'accueil et recharger la page
-    try {
-      router.push("/");
-      router.reload();
-    } catch (error) {
-      // En cas d'échec, utiliser window.location
-      window.location.href = "/";
-    }
+    router.push("/");
   };
 
   return (

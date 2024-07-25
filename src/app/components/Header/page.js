@@ -4,6 +4,7 @@ import Link from "next/link";
 import { GiFullPizza } from "react-icons/gi";
 import { BsCart4 } from "react-icons/bs";
 import { RiLoginCircleLine, RiAccountCircleFill } from "react-icons/ri";
+import { RiStickyNoteAddLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { initializeCart } from "@/app/redux/slices/cartSlice";
 import Cookies from "js-cookie";
@@ -96,12 +97,20 @@ export default function Header() {
               )}
             </div>
           ) : (
-            <Link href="/LoginPage" className=" font-bold flex mr-6">
-              <button className="flex text-black bg-white rounded-md p-2 h-9 z-30 ">
-                <span className="mt-[-2px]">Connexion</span>
-                <RiLoginCircleLine className=" mt-[-2px] ml-4 text-[26px]" />
-              </button>
-            </Link>
+            <>
+              <Link href="/RegisterPage" className="font-bold flex mr-6">
+                <button className="flex text-black bg-white rounded-md p-2 h-9 z-30">
+                  <span className="mt-[-2px]">Inscription</span>
+                  <RiStickyNoteAddLine className="mt-[-2px] ml-4 text-[26px]" />
+                </button>
+              </Link>
+              <Link href="/LoginPage" className="font-bold flex mr-6">
+                <button className="flex text-black bg-white rounded-md p-2 h-9 z-30">
+                  <span className="mt-[-2px]">Connexion</span>
+                  <RiLoginCircleLine className="mt-[-2px] ml-4 text-[26px]" />
+                </button>
+              </Link>
+            </>
           )}
           <div className="text-xl relative">
             <BsCart4 className="mr-2" /> {/* Ajout de marge à droite */}
