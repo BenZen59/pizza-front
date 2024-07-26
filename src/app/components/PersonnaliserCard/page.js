@@ -125,7 +125,7 @@ export default function PersonnaliserCard({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-black opacity-10"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-10"></div>
       <div className="relative w-[1040px] h-[790px] bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md z-10 overflow-y-auto">
         <div className="flex justify-center w-[700px] h-auto bg-white text-black p-4 shadow-lg border-opacity-20 border-black border rounded-md mt-8 text-center ml-[15%]">
           <div className="flex justify-center mt-2">
