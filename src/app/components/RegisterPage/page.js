@@ -17,14 +17,12 @@ export default function RegisterPage() {
     try {
       console.log("Submitting data:", data); // Log the data to be sent
       await pizzaApi.register(data);
+      alert("Mail de validation de compte envoyé !");
       router.push("/LoginPage");
     } catch (error) {
       console.error("Registration error:", error.response || error.message);
       if (error.response && error.response.data) {
-        setSubmitError(
-          error.response.data.message ||
-            "L'inscription a échoué. Veuillez réessayer."
-        );
+        setSubmitError(error.response.data.message || "Mail déjà utilisé !");
       } else {
         setSubmitError(
           "L'inscription a échoué. Veuillez vérifier votre connexion réseau et réessayer."

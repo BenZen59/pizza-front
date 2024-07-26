@@ -25,7 +25,9 @@ export default function LoginPage() {
       localStorage.setItem("token", token);
       router.push("/");
     } catch (error) {
-      setErrorMessage("Nom d'utilisateur ou mot de passe incorrect");
+      setErrorMessage(
+        "Nom d'utilisateur ou mot de passe incorrect ou compte non activé"
+      );
     }
   };
 

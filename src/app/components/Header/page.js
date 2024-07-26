@@ -86,7 +86,7 @@ export default function Header() {
                 <span className="ml-2">{userName}</span>
               </button>
               {showMenu && (
-                <div className="absolute top-12 right-0 bg-white border border-black border-opacity-20 text-black shadow-md rounded-md p-2 z-30">
+                <div className="absolute top-12 right-0 bg-white border border-black border-opacity-20 text-black shadow-md rounded-md p-2 z-30 w-[170px]">
                   <Link href="/Dashboard">
                     <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 text-center h-10 z-30 mb-2 w-[150px] transition duration-200">
                       <span className="text-center">Dashboard</span>
@@ -98,7 +98,7 @@ export default function Header() {
             </div>
           ) : (
             <>
-              <Link href="/RegisterPage" className="font-bold flex mr-6">
+              <Link href="/RegisterPage" className="font-bold flex mr-3">
                 <button className="flex text-black bg-white rounded-md p-2 h-9 z-30">
                   <span className="mt-[-2px]">Inscription</span>
                   <RiStickyNoteAddLine className="mt-[-2px] ml-4 text-[26px]" />
