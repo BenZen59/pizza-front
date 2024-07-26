@@ -1,12 +1,14 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "@/app/redux/slices/cartSlice";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import MessageConfirmationCommande from "../MessageConfirmationCommande/page";
 import Image from "next/image";
 
 export default function CartSidebar() {
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const { loading, cartItems, totalPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -31,6 +33,14 @@ export default function CartSidebar() {
     );
   };
 
+  const handleShowConfirmation = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleHideConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
   return (
     <div className="fixed right-0 top-0 w-52 h-screen shadow-lg border border-opacity-20 border-black flex flex-col pt-10 z-10">
       {loading ? (
@@ -44,9 +54,17 @@ export default function CartSidebar() {
           <div className="p-2 flex flex-col items-center border-b border-b-black pb-4">
             <div className="text-black">Total :</div>
             <div className="font-bold text-red-700">{totalPrice} €</div>
-            <button className="rounded-full bg-red-500 text-white mt-3 hover:bg-red-600 px-2 py-1 flex items-center justify-center space-x-2 mx-auto text-base">
+
+            <button
+              className="rounded-full bg-red-500 text-white mt-3 hover:bg-red-600 px-2 py-1 flex items-center justify-center space-x-2 mx-auto text-base"
+              onClick={handleShowConfirmation}
+            >
               Commander
             </button>
+
+            {showConfirmation && (
+              <MessageConfirmationCommande onClose={handleHideConfirmation} />
+            )}
           </div>
           <div className="flex-1 overflow-y-auto">
             {cartItems.map((item) => (
