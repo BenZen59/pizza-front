@@ -1,16 +1,27 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "@/app/redux/slices/cartSlice";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { useRouter } from "next/navigation";
 import MessageConfirmationCommande from "../MessageConfirmationCommande/page";
 import Image from "next/image";
 
 export default function CartSidebar() {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { loading, cartItems, totalPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const removeFromCartHandler = (item) => {
     dispatch(
@@ -34,7 +45,11 @@ export default function CartSidebar() {
   };
 
   const handleShowConfirmation = () => {
-    setShowConfirmation(true);
+    if (isLoggedIn) {
+      setShowConfirmation(true);
+    } else {
+      router.push("/LoginPage"); // Rediriger vers la page de connexion
+    }
   };
 
   const handleHideConfirmation = () => {

@@ -113,13 +113,10 @@ export default function PersonnaliserCard({
           libelle: comp.ingredients,
           qty: comp.quantite,
           prix: comp.prix,
-        })), // Include only selected supplements
+        })),
     };
     console.log(itemData);
-
-    // Dispatch action to add the item to the cart
     dispatch(addToCartPersonnaliser(itemData));
-    // Close the modal after adding to cart
     onClose();
   };
 

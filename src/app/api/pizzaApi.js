@@ -19,10 +19,14 @@ const pizzaApi = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-    }); // Assurez-vous qu'il n'y a pas de barre oblique finale
+    });
   },
   getAccountDetail: (token) => {
     return axios.get(`/api/register/accountdetail?token=${token}`);
+  },
+  createCommande: (data) => {
+    console.log(data);
+    return axios.post(`/api/commandes/${data}`);
   },
 };
 

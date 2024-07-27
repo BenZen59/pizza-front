@@ -20,7 +20,7 @@ export default function ArticleCard({ selectedCategorie }) {
   const [articles, setArticles] = useState([]);
   const [taille, setTaille] = useState(26); // Taille par défaut, peut être modifiée si nécessaire
   const [allArticles, setAllArticles] = useState([]); // Tous les articles non filtrés
-  const [selectedArticle, setSelectedArticle] = useState(null); // State for selected article to customize
+  const [selectedArticle, setSelectedArticle] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
