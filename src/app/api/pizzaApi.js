@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const pizzaApi = {
   getTypeProduit: () => {
@@ -17,7 +17,7 @@ const pizzaApi = {
   register: (data) => {
     return axios.post(`/api/register`, data, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
   },
@@ -27,6 +27,9 @@ const pizzaApi = {
   createCommande: (data) => {
     console.log(data);
     return axios.post(`/api/commandes/${data}`);
+  },
+  getCommande: (idClient) => {
+    return axios.get(`/api/commandes/${idClient}`);
   },
 };
 
