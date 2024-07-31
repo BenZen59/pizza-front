@@ -31,6 +31,13 @@ const pizzaApi = {
   getCommande: (idClient) => {
     return axios.get(`/api/commandes/${idClient}`);
   },
+  addArticleToCommande: (idCommande, idArticle, qty, compositions) => {
+    return axios.post(`/commandes/${idCommande}/articles`, {
+      idArticle,
+      qty,
+      compositions,
+    });
+  },
 };
 
 export default pizzaApi;

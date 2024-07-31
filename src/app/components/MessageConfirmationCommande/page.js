@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import pizzaApi from '@/app/api/pizzaApi';
 
 export default function MessageConfirmationCommande({ onClose, cartItems }) {
@@ -7,7 +8,7 @@ export default function MessageConfirmationCommande({ onClose, cartItems }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       setIsLoggedIn(true);
 

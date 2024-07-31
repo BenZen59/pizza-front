@@ -1,21 +1,21 @@
-"use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import Link from "next/link";
-import { GiFullPizza } from "react-icons/gi";
-import { BsCart4 } from "react-icons/bs";
-import { RiLoginCircleLine, RiAccountCircleFill } from "react-icons/ri";
-import { RiStickyNoteAddLine } from "react-icons/ri";
-import { useSelector, useDispatch } from "react-redux";
-import { initializeCart } from "@/app/redux/slices/cartSlice";
-import Cookies from "js-cookie";
-import LogoutButton from "../LogoutButton";
-import pizzaApi from "@/app/api/pizzaApi";
+'use client';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Link from 'next/link';
+import { GiFullPizza } from 'react-icons/gi';
+import { BsCart4 } from 'react-icons/bs';
+import { RiLoginCircleLine, RiAccountCircleFill } from 'react-icons/ri';
+import { RiStickyNoteAddLine } from 'react-icons/ri';
+import { useSelector, useDispatch } from 'react-redux';
+import { initializeCart } from '@/app/redux/slices/cartSlice';
+import Cookies from 'js-cookie';
+import LogoutButton from '../LogoutButton';
+import pizzaApi from '@/app/api/pizzaApi';
 
 export default function Header() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
   const [showMenu, setShowMenu] = useState(false);
 
   // Calculer le nombre total d'articles dans le panier
@@ -26,7 +26,7 @@ export default function Header() {
 
   useEffect(() => {
     // Initialiser le panier à partir des cookies côté client
-    const persistedState = Cookies.get("cart");
+    const persistedState = Cookies.get('cart');
     if (persistedState) {
       dispatch(initializeCart(JSON.parse(persistedState)));
     }
@@ -34,7 +34,7 @@ export default function Header() {
 
   useEffect(() => {
     // Vérifier si le client est connecté
-    const token = localStorage.getItem("token");
+    const token = Cookies.get('token');
     if (token) {
       setIsLoggedIn(true);
 
@@ -46,7 +46,7 @@ export default function Header() {
           console.log(prenom + nom);
           setUserName(`${prenom} ${nom}`);
         } catch (error) {
-          console.error("Failed to fetch user info", error);
+          console.error('Failed to fetch user info', error);
         }
       };
 
@@ -61,7 +61,7 @@ export default function Header() {
   // Fonction pour formatter le nombre d'articles
   const formatTotalItems = (total) => {
     // Limiter le nombre à 99 maximum
-    return total > 99 ? "99+" : total.toString();
+    return total > 99 ? '99+' : total.toString();
   };
 
   const toggleMenu = useCallback(() => {
@@ -70,26 +70,26 @@ export default function Header() {
 
   return (
     <header>
-      <nav className="flex justify-between items-center h-12 px-4 shadow-md bg-black text-white">
-        <Link href="/" className="text-xl font-bold flex">
+      <nav className='flex justify-between items-center h-12 px-4 shadow-md bg-black text-white'>
+        <Link href='/' className='text-xl font-bold flex'>
           L'atelier Pizza
-          <GiFullPizza className="mt-1 ml-4" />
+          <GiFullPizza className='mt-1 ml-4' />
         </Link>
-        <div className="pr-10 flex relative items-center">
+        <div className='pr-10 flex relative items-center'>
           {isLoggedIn ? (
-            <div className="flex items-center font-bold relative">
+            <div className='flex items-center font-bold relative'>
               <button
-                className="flex text-black bg-white rounded-md p-2 h-9 z-30 mr-6"
+                className='flex text-black bg-white rounded-md p-2 h-9 z-30 mr-6'
                 onClick={toggleMenu}
               >
-                <RiAccountCircleFill className="text-[26px] mt-[-2px]" />
-                <span className="ml-2">{userName}</span>
+                <RiAccountCircleFill className='text-[26px] mt-[-2px]' />
+                <span className='ml-2'>{userName}</span>
               </button>
               {showMenu && (
-                <div className="absolute top-12 right-0 bg-white border border-black border-opacity-20 text-black shadow-md rounded-md p-2 z-30 w-[170px]">
-                  <Link href="/Dashboard">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 text-center h-10 z-30 mb-2 w-[150px] transition duration-200">
-                      <span className="text-center">Dashboard</span>
+                <div className='absolute top-12 right-0 bg-white border border-black border-opacity-20 text-black shadow-md rounded-md p-2 z-30 w-[170px]'>
+                  <Link href='/Dashboard'>
+                    <button className='bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 text-center h-10 z-30 mb-2 w-[150px] transition duration-200'>
+                      <span className='text-center'>Dashboard</span>
                     </button>
                   </Link>
                   <LogoutButton />
@@ -98,25 +98,25 @@ export default function Header() {
             </div>
           ) : (
             <>
-              <Link href="/RegisterPage" className="font-bold flex mr-3">
-                <button className="flex text-black bg-white rounded-md p-2 h-9 z-30">
-                  <span className="mt-[-2px]">Inscription</span>
-                  <RiStickyNoteAddLine className="mt-[-2px] ml-4 text-[26px]" />
+              <Link href='/RegisterPage' className='font-bold flex mr-3'>
+                <button className='flex text-black bg-white rounded-md p-2 h-9 z-30'>
+                  <span className='mt-[-2px]'>Inscription</span>
+                  <RiStickyNoteAddLine className='mt-[-2px] ml-4 text-[26px]' />
                 </button>
               </Link>
-              <Link href="/LoginPage" className="font-bold flex mr-6">
-                <button className="flex text-black bg-white rounded-md p-2 h-9 z-30">
-                  <span className="mt-[-2px]">Connexion</span>
-                  <RiLoginCircleLine className="mt-[-2px] ml-4 text-[26px]" />
+              <Link href='/LoginPage' className='font-bold flex mr-6'>
+                <button className='flex text-black bg-white rounded-md p-2 h-9 z-30'>
+                  <span className='mt-[-2px]'>Connexion</span>
+                  <RiLoginCircleLine className='mt-[-2px] ml-4 text-[26px]' />
                 </button>
               </Link>
             </>
           )}
-          <div className="text-xl relative">
-            <BsCart4 className="mr-2" /> {/* Ajout de marge à droite */}
+          <div className='text-xl relative'>
+            <BsCart4 className='mr-2' /> {/* Ajout de marge à droite */}
           </div>
-          {typeof window !== "undefined" && (
-            <span className="absolute font-bold text-red-500 text-xl ml-1 top-0 right-0 w-10 h-7 flex items-center justify-center bg-white rounded-md">
+          {typeof window !== 'undefined' && (
+            <span className='absolute font-bold text-red-500 text-xl ml-1 top-0 right-0 w-10 h-7 flex items-center justify-center bg-white rounded-md'>
               {formatTotalItems(totalItems)}
             </span>
           )}

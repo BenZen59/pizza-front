@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import withAuth from '../../components/withAuth';
 import HeaderWithoutCart from '../HeaderWithoutCart/page';
 import pizzaApi from '@/app/api/pizzaApi';
+import Cookies from 'js-cookie';
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       setIsLoggedIn(true);
 

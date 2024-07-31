@@ -1,17 +1,18 @@
 // src/components/withAuth.js
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const withAuth = (WrappedComponent) => {
   return (props) => {
     const router = useRouter();
 
     useEffect(() => {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get('token');
       if (!token) {
-        router.push("/LoginPage");
+        router.push('/LoginPage');
       }
     }, []);
 

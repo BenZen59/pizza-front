@@ -7,6 +7,7 @@ import { MdOutlineDeleteOutline } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import MessageConfirmationCommande from '../MessageConfirmationCommande/page';
 import Image from 'next/image';
+import Cookies from 'js-cookie';
 
 export default function CartSidebar() {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -17,7 +18,7 @@ export default function CartSidebar() {
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       setIsLoggedIn(true);
     }
