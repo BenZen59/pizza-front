@@ -31,12 +31,20 @@ const pizzaApi = {
   getCommande: (idClient) => {
     return axios.get(`/api/commandes/${idClient}`);
   },
-  addArticleToCommande: (idCommande, idArticle, qty, compositions) => {
-    return axios.post(`/commandes/${idCommande}/articles`, {
-      idArticle,
-      qty,
-      compositions,
-    });
+  addArticleToCommande: (numeroCommande, idArticle, quantite, composition) => {
+    const url = `/api/commandes/${numeroCommande}/${idArticle}/${quantite}`;
+    const params = composition ? { composition: composition } : {};
+
+    return axios.post(
+      url,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        params: params,
+      }
+    );
   },
 };
 

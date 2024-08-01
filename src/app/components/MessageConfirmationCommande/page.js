@@ -7,6 +7,7 @@ export default function MessageConfirmationCommande({ onClose, cartItems }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
@@ -33,20 +34,33 @@ export default function MessageConfirmationCommande({ onClose, cartItems }) {
     setLoading(true);
     setError(null);
     try {
-      // Envoyer les données à l'API
+      // Créer une commande pour l'utilisateur
       const response = await pizzaApi.createCommande(userData.idClient);
-      const idCommande = response.data.numeroCommande;
-      console.log(idCommande);
-      for (const item of cartItems) {
-        await pizzaApi.addArticleToCommande(
-          idCommande,
-          item.idArticle,
-          item.qty,
-          item.compositions
-        );
-      }
+      const numeroCommande = response.data.numeroCommande;
+
+      // Ajouter chaque article du panier à la commande
+      const addArticlesPromises = cartItems.map((item) => {
+        return pizzaApi
+          .addArticleToCommande(
+            numeroCommande,
+            item.idArticle,
+            item.qty,
+            item.compositions
+          )
+          .catch((err) => {
+            // Gestion individuelle des erreurs pour chaque article
+            console.error(
+              `Erreur lors de l'ajout de l'article ${item.idArticle}`,
+              err
+            );
+          });
+      });
+
+      // Attendre que toutes les promesses soient résolues
+      await Promise.all(addArticlesPromises);
+
       // Vérifiez que `response` est défini et contient les données attendues
-      alert('Commande créée avec succès', response.data);
+      alert('Commande créée avec succès');
       onClose(); // Fermez le modal ou effectuez une autre action
     } catch (error) {
       // Utilisez `console.error` pour vérifier le contenu de l'erreur
@@ -54,7 +68,7 @@ export default function MessageConfirmationCommande({ onClose, cartItems }) {
       // Ajustez le message d'erreur en fonction de la structure de l'erreur retournée par l'API
       setError(
         error.response?.data?.error ||
-          'Erreur lors de la création de la commande. Veuillez réessayer.'
+          'Erreur lors de la création de la commande'
       );
     } finally {
       setLoading(false);
